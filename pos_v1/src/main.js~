@@ -1,0 +1,70 @@
+//TODO: Please write code in this file.
+function printInventory(inputs)
+{
+    var num = inputs.length;
+    var new_inputs = new Array();
+    var i,j = -1,all = 0,promo = 0;
+    var item = loadAllItems();
+    var promoitem = loadPromotions();
+    var cont = '***<没钱赚商店>购物清单***\n',cont_='挥泪赠送商品：\n';
+    function Item(count,barcode)
+    {
+        this.count = count;
+        this.barcode = barcode;
+    }
+
+
+    for(i=0;i<num;i++)                                                      //合并相同物品
+    {
+        if(inputs[i].length == 10)
+        {
+            if ((i!=0)&&(inputs[i] == new_inputs[j].barcode))
+                (new_inputs[j].count)++;
+            else
+            {
+                new_inputs[++j] =new Item(1,inputs[i]);
+            }
+        }
+        else
+            new_inputs[++j] =new Item(parseInt(inputs[i].slice(11)),inputs[i].slice(0,10));
+    }
+    function find(n)                                                        //遍历查找
+    {
+        var t = 0 ;
+        while(new_inputs[n].barcode != item[t].barcode)
+            t++;
+        return t;
+    }
+    function _pro_(m)                                                     //是否属于打折商品
+    {
+        var p = 0;
+        while((new_inputs[m].barcode != promoitem[0].barcodes[p])&&(p < promoitem[0].barcodes.length ))
+            p++;
+        console.log(p);
+        if (p == promoitem[0].barcodes.length)
+        return false;
+        else
+        return true;
+    }
+
+    for(i = 0; i < j+1; i++)
+    {                                                                       //打印
+        var n = find(i);
+        var price = (new_inputs[i].count)*(item[n].price);
+        cont += "名称：" + item[n].name + "，数量：" + new_inputs[i].count + item[n].unit+"，单价：" + item[n].price.toFixed(2)  + "(元)，小计：" + price.toFixed(2) + "(元)\n";
+        all += price;
+        if((new_inputs[i].count>=2)&&_pro_(i))
+        {
+            cont_ += "名称：" + item[n].name + "，数量：1"  + item[n].unit+'\n';
+            promo += item[n].price;
+        }
+
+
+    }
+    cont += "----------------------\n" +cont_+
+    '----------------------\n' +
+    "总计："+(all-promo).toFixed(2) +"(元)\n"+
+    "节省："+promo.toFixed(2) +"(元)\n"+
+    "**********************";
+    console.log(cont);
+}
