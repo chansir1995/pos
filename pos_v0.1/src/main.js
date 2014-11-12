@@ -1,29 +1,26 @@
 //TODO: Please write code in this file.
-function printInventory(inputs) {
-    var item_num = inputs.length, i,j=0;
+function printInventory(inputs)
+{
+    var item_num = inputs.length, i,j=-1;
     var all = 0;
-    var item = inputs;
+    var item = new Array();
     var cont = '***<没钱赚商店>购物清单***\n';
-    for (i = 0; i < item_num; i++){                                    //合并相同物品
-        if (i == 0){item[j].barcode = inputs[i].barcode;
-            item[j].name = inputs[i].name;
-            item[j].unit = inputs[i].unit;
-            item[j].price = inputs[i].price;
-            item[j].count = 0;
-        }
 
-        if (inputs[i].barcode == item[j].barcode){
-            (item[j].count)++;
-        }
+    function Item(barcode,name,unit,price)
+{
+    this.barcode = barcode;
+    this.name = name;
+    this.unit = unit;
+    this.price = price;
+    this.count = 1;
+}
+    for (i = 0; i < item_num; i++)
+    {                                                                   //合并相同物品
+        if ((i != 0)&&(inputs[i].barcode == item[j].barcode))
+         (item[j].count)++;
+        else
+            item[++j]=new Item(inputs[i].barcode,inputs[i].name,inputs[i].unit,inputs[i].price);
 
-        else{
-            j++;
-            item[j].barcode = inputs[i].barcode;
-            item[j].name = inputs[i].name;
-            item[j].unit = inputs[i].unit;
-            item[j].price = inputs[i].price;
-            item[j].count = 1;
-        }
 
     }
     for(i = 0; i < j+1; i++) {                                          //打印
